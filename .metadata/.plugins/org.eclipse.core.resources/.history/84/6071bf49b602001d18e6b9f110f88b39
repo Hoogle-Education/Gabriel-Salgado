@@ -1,0 +1,56 @@
+package utilities;
+
+import java.util.List;
+
+import entities.Cotacao;
+import entities.Moeda;
+
+public class CalculadoraCotacoes {
+
+	List<Cotacao> cotacoes;
+
+	public CalculadoraCotacoes(List<Cotacao> cotacoes) {
+		this.cotacoes = cotacoes;
+	}
+
+	public String mediaMoeda(int dias, int codigoMoeda) {
+		String aux = "";
+		Moeda moeda;		
+		
+		for(int i = 0; i < cotacoes.size() - dias; i++) {
+			
+			if(!aux.equals("")) aux += "\n"; 
+			
+			if(codigoMoeda == 1) 
+				moeda = cotacoes.get(i).getMoeda1();
+			else 
+				moeda = cotacoes.get(i).getMoeda2();
+			
+			double mediaCompra = 0.0, mediaVenda = 0.0;
+			
+			for(int j = i; j < (i+5); j++) {
+				mediaCompra += moeda.getPrecoCompra();
+				mediaVenda += moeda.getPrecoVenda();
+			}
+			
+			mediaCompra /= dias;
+			mediaVenda /= dias;
+			
+			aux += "Intervalo = " + dias + " dias " 
+			       +"| Compra = R$" + mediaCompra 
+					+ "| Venda = R$" + mediaVenda + "]";
+		}
+		
+		
+		return aux;  
+	}
+
+	public String media() {
+		String aux = "";
+		aux += mediaPrimeiraMoeda();
+		aux += "\n";
+		aux += mediaSegundaMoeda();
+		return aux;
+	}
+
+}

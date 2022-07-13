@@ -1,0 +1,9 @@
+package metatrader.entities;
+
+public class Cotacao {
+	
+	private Date data;
+	private Moeda moeda1;
+	private Moeda moeda2;
+	
+}

@@ -1,0 +1,5 @@
+package metatrader.utilities;
+
+public class LeitorCSV {
+
+}

@@ -1,0 +1,30 @@
+package application;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import entities.Cotacao;
+import utilities.LeitorCSV;
+
+public class MetaTraderApp {
+
+	public static void main(String[] args) {
+		
+		List<Cotacao> cotacoes = new ArrayList<>();
+		preencheCotacoes(cotacoes);
+		
+		
+	}
+
+	private static void preencheCotacoes(List<Cotacao> cotacoes) {
+		LeitorCSV leitor = new LeitorCSV();
+		try {
+			leitor.abrir("EURUSDH1.csv");
+			cotacoes = leitor.extrair();
+			leitor.fechar();	
+		} catch (Exception e) {
+			System.err.println("Houve um problema durante o programa!");
+		}
+	}
+	
+}

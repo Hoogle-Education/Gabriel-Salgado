@@ -1,0 +1,10 @@
+package metatrader.entities;
+
+public class Moeda {
+	
+	private String nome;
+	private Double precoVenda;
+	private Double precoCompra;
+	
+	
+}
