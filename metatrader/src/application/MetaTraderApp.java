@@ -5,29 +5,59 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
-import entities.Cotacao;
-import utilities.CalculadoraCotacoes;
+import javax.swing.JFrame;
+
+import entities.Ativo;
+import utilities.CalculadoraAtivos;
 import utilities.LeitorCSV;
 
-public class MetaTraderApp {
+public class MetaTraderApp extends JFrame {
 
+	private static final long serialVersionUID = 1L;
+
+	
+	
 	public static void main(String[] args) {
+
+		Scanner in = new Scanner(System.in);
+		List<Ativo> cotacoes = preencheCotacoes();
+		CalculadoraAtivos calc = new CalculadoraAtivos(cotacoes);
+		int curta, intermediaria, longa;
 		
-		List<Cotacao> cotacoes = preencheCotacoes();
-		CalculadoraCotacoes calc = new CalculadoraCotacoes(cotacoes);
-		
-		System.out.println(calc.media(40));
+		cotacoes.forEach(System.out::println);
+
+//		for(double value : calc.mediaMovelAritmetica(6) ) {
+//			System.out.printf("Média móvel aritmética = %.4f\n", value);
+//		}
+
+//		for (double value : calc.mediaMovelExponencial(6)) {
+//			System.out.printf("Média móvel exponencial = %.4f\n", value);
+//		}
+
+//		System.out.println("Total de cotações no sistema: " + cotacoes.size());
+//
+//		System.out.print("Digite o período de média curta:");
+//		curta = in.nextInt();
+//
+//		System.out.print("Digite o período de média intermediária:");
+//		intermediaria = in.nextInt();
+//
+//		System.out.print("Digite o período de média longa:");
+//		longa = in.nextInt();
+//
+//		System.out.println("Desvio = " + calc.desvioPadrao(cotacoes));
 		
 	}
 
-	public static List<Cotacao> preencheCotacoes() {
-		
-		List<Cotacao> cotacoes = new ArrayList<>();
+	public static List<Ativo> preencheCotacoes() {
+
+		List<Ativo> cotacoes = new ArrayList<>();
 		LeitorCSV leitor = new LeitorCSV();
-		
+
 		try {
-			leitor.abrir("EURUSDH1.csv");
+			leitor.abrir("metatrader.csv");
 			cotacoes = leitor.extrair();
 			leitor.fechar();
 			return cotacoes;
@@ -38,8 +68,8 @@ public class MetaTraderApp {
 		} catch (IOException e) {
 			System.err.println("Houve um erro ao manipular o arquivo!");
 		}
-		
+
 		return null;
 	}
-	
+
 }

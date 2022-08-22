@@ -1,6 +1,0 @@
-package metatrader.entities;
-
-public class Cotacao {
-	pivate Date data;
-	
-}
