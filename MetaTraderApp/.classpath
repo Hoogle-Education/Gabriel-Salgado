@@ -9,5 +9,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/jcommon"/>
 	<classpathentry kind="lib" path="C:/Users/hugor/Downloads/jfreechart-1.0.1/lib/jfreechart-1.0.1.jar"/>
 	<classpathentry kind="lib" path="C:/Users/hugor/Desktop/Aulas/alunos/Java/Gabriel Salgado/lib/jexcelapi_2_6_12.zip"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/jxlapi"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
