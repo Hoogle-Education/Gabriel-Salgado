@@ -1,60 +1,74 @@
 package application;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
 
-import javax.swing.GroupLayout;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import entities.Ativo;
+import jxl.write.WriteException;
+import jxl.write.biff.RowsExceededException;
+import utilities.file.EscritorExcel;
+import utilities.file.LeitorCSV;
 
-public class TradingApplication extends JFrame implements ActionListener{
-
-	private static final long serialVersionUID = 1L;
+class TradingApplication {
 	
-	public TradingApplication(String title) {
-		super(title);
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		JFrame.setDefaultLookAndFeelDecorated(true);
-		
-		JButton retrieve = new JButton("Atualizar");
-		JButton buy = new JButton("Comprar");
-		JButton sell = new JButton("Vender");
-		
-		// Create and set up a frame window
- 
-        // Define the panel to hold the buttons
-        JPanel panel = new JPanel();
-        panel.setSize(700, 600);
-        GroupLayout layout = new GroupLayout(panel);
-
-        layout.setAutoCreateGaps(true);
-        layout.setAutoCreateContainerGaps(true);
-        panel.setLayout(layout);
- 
-        // Set for horizontal and vertical group
-        layout.setHorizontalGroup(layout.createSequentialGroup()
-                .addGroup(layout.createSequentialGroup().addGroup(layout
-                        .createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(buy).addComponent(retrieve).addComponent(sell))));
-        layout.setVerticalGroup(
-                layout.createSequentialGroup().addComponent(buy).addComponent(retrieve).addComponent(sell));
-        // Set the window to be visible as the default to be false
-        
-        this.add(panel);
-        this.pack();
-        this.setVisible(true);		
+	static List<Ativo> dados;
+	static List<Double> medias;
+	
+	public TradingApplication() {
+		dados = new ArrayList<>();
 	}
 	
-	public static void main(String[] args) {
+	public void lerArquivo(String nomeDoArquivo) throws IOException, ParseException {
 		
-		new TradingApplication("Trading project");
+		LeitorCSV leitor = new LeitorCSV();
 		
+		try {
+			leitor.abrir(nomeDoArquivo);
+			dados = leitor.extrair();
+		}catch(FileNotFoundException e1) {
+			System.err.println("Erro ao encontrar o arquivo");
+			throw e1;
+		}catch(IOException e2) {
+			System.err.println("Erro ao salvar no arquivo");
+			throw e2;
+		} catch (ParseException e3) {
+			System.err.println("Erro ao Interpretar o arquivo");
+			throw e3;
+		}
+		
+		try{
+			leitor.fechar();
+		}catch(IOException e){
+			System.err.println("Erro ao fechar o arquivo");
+			throw e;
+		}
 	}
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		
+	
+	
+	
+	public void escreverAtivos(String nomePlanilha, String nomeAba) throws IOException, RowsExceededException, WriteException {		
+		EscritorExcel escritor = new EscritorExcel();
+		try{
+			escritor.criarPlanilha(nomePlanilha);
+			escritor.criarAba(nomeAba);
+			escritor.escreverAtivos(dados, nomeAba);
+			escritor.fecharPlanilha();
+		}catch(FileNotFoundException e1){
+			System.err.println("Erro ao encontrar o arquivo");
+			throw e1;
+		}catch(IOException e2){
+			System.err.println("Erro ao salvar no arquivo");
+			throw e2;
+		}catch(RowsExceededException e3) {
+			System.err.println("Erro: Excedeu o limite de linhas");
+			throw e3;
+		}catch(WriteException e4) {
+			System.err.println("Erro ao escrever na planilha");
+			throw e4;
+		}
 	}
 	
 }
