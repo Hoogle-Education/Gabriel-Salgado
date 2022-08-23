@@ -2,59 +2,94 @@ package application;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
 
-import javax.swing.GroupLayout;
-import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
-public class TradingApplication extends JFrame implements ActionListener{
+import entities.Ativo;
+import utilities.file.EscritorExcel;
+import utilities.file.LeitorCSV;
+
+
+public class TradingApplicationWindow extends JFrame implements ActionListener{
 
 	private static final long serialVersionUID = 1L;
 	
-	public TradingApplication(String title) {
+	JTable tabelaTrading;
+	TradingApplication tradingApplication;
+	DefaultTableModel modelo;
+	JMenuBar menu;
+	JMenu menuArquivo, menuCliente;
+	JMenuItem menuItemLer, menuItemEscrever, menuItemVender, menuItemComprar;
+	
+	public TradingApplicationWindow(String title) {
 		super(title);
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		JFrame.setDefaultLookAndFeelDecorated(true);
+		tradingApplication = new TradingApplication();
 		
-		JButton retrieve = new JButton("Atualizar");
-		JButton buy = new JButton("Comprar");
-		JButton sell = new JButton("Vender");
+		String[] colunas = { 
+			"ID",
+			"Date",
+			"Open",
+			"High",
+			"Low",
+			"Close",
+			"Ticket Volume",
+			"Volume",
+			"Spread"
+		};
 		
-		// Create and set up a frame window
- 
-        // Define the panel to hold the buttons
-        JPanel panel = new JPanel();
-        panel.setSize(700, 600);
-        GroupLayout layout = new GroupLayout(panel);
-
-        layout.setAutoCreateGaps(true);
-        layout.setAutoCreateContainerGaps(true);
-        panel.setLayout(layout);
- 
-        // Set for horizontal and vertical group
-        layout.setHorizontalGroup(layout.createSequentialGroup()
-                .addGroup(layout.createSequentialGroup().addGroup(layout
-                        .createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(buy).addComponent(retrieve).addComponent(sell))));
-        layout.setVerticalGroup(
-                layout.createSequentialGroup().addComponent(buy).addComponent(retrieve).addComponent(sell));
-        // Set the window to be visible as the default to be false
-        
-        this.add(panel);
-        this.pack();
-        this.setVisible(true);		
+		modelo = new DefaultTableModel();
+		modelo.setColumnIdentifiers(colunas);
+		
+		tabelaTrading = new JTable();
+		tabelaTrading.setModel(modelo);
+		
+		JScrollPane scroll = new JScrollPane(tabelaTrading);
+		add(scroll);
+		
+		scroll.addComponentListener( new ComponentAdapter() {
+	      @Override
+	      public void componentResized( ComponentEvent e){
+	        tabelaTrading.getColumnModel().getColumn(0).setPreferredWidth(scroll.getWidth()*1/50);
+	        tabelaTrading.getColumnModel().getColumn(1).setPreferredWidth(scroll.getWidth()*1/50);
+	        tabelaTrading.setAutoResizeMode(JTable.AUTO_RESIZE_SUBSEQUENT_COLUMNS);
+	      }
+	    });
+		
+		menu();
+		
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	    setSize(1000, 600);
+	    setVisible(true);
 	}
 	
-	public static void main(String[] args) {
+	
+	public void menu() {
+		menu = new JMenuBar();
 		
-		new TradingApplication("Trading project");
+		
 		
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
 		
+	}
+	
+	public static void main(String[] args) {
+		new TradingApplicationWindow("Trading project");
 	}
 	
 }
