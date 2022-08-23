@@ -12,7 +12,7 @@ import utilities.file.LeitorCSV;
 
 public class BaseApp {
 
-	private static List<Ativo> ativos;
+	public static List<Ativo> ativos;
 	private static List<Double> calculations;
 	private static CalculadoraAtivos calculadora;
 	private static Integer lastPos, lastAtivo;
@@ -61,7 +61,7 @@ public class BaseApp {
 		return lastPos == lista.size();
 	}
 
-	private static void preencheDados() {
+	public static void preencheDados() {
 
 		LeitorCSV leitor = new LeitorCSV();
 
@@ -78,5 +78,19 @@ public class BaseApp {
 		}
 
 	}
+	
+	public static void main(String[] args) {
+		preencheDados();
+		CalculadoraAtivos calc = new CalculadoraAtivos(ativos);
+		
+		List<Double> mediaCurta = calc.mediaMovelExponencial(20);
+		List<Double> mediaIntermediaria = calc.mediaMovelExponencial(60);
+		List<Double> mediaLonga = calc.mediaMovelExponencial(120);
+		
 
+		
+		System.out.println("Desvio padrao = " + calc.desvioPadrao());
+		
+	}
+	
 }

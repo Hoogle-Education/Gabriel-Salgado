@@ -37,9 +37,14 @@ public class LeitorCSV {
 		while ((linha = reader.readLine()) != null) {
 			String data = linha.substring(0, 19);
 			String[] dados = linha.substring(20).split("\t");
-			cotacoes.add(new Ativo(formatador.parse(data), Double.parseDouble(dados[0]),
-					Double.parseDouble(dados[1]), Double.parseDouble(dados[2]), Double.parseDouble(dados[3]),
-					Integer.parseInt(dados[4]), Integer.parseInt(dados[5]), Integer.parseInt(dados[6]) ));
+			cotacoes.add(new Ativo(formatador.parse(data),
+					Double.parseDouble(dados[0]),
+					Double.parseDouble(dados[1]),
+					Double.parseDouble(dados[2]),
+					Double.parseDouble(dados[3]),
+					Integer.parseInt(dados[4]),
+					Integer.parseInt(dados[5]),
+					Integer.parseInt(dados[6]) ));
 		}
 
 		return cotacoes;

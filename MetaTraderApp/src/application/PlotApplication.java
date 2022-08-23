@@ -10,14 +10,14 @@ import javax.swing.JPanel;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.axis.ValueAxis;
-import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.time.Minute;
 import org.jfree.data.time.TimeSeries;
-import org.jfree.data.time.TimeSeriesCollection;
-import org.jfree.data.xy.XYDataset;
 import org.jfree.ui.ApplicationFrame;
 import org.jfree.ui.RefineryUtilities;
+
+import entities.Ativo;
 
 public class PlotApplication extends ApplicationFrame implements ActionListener {
 	
@@ -28,10 +28,17 @@ public class PlotApplication extends ApplicationFrame implements ActionListener 
 	public PlotApplication(String applicationTitle) {
 		super(applicationTitle);
 		series = new TimeSeries("Close values line", Minute.class);
-		final TimeSeriesCollection dataset = new TimeSeriesCollection(series);
-		final JFreeChart chart = createChart(dataset);
 		
-		final ChartPanel chartPanel = new ChartPanel(chart);
+		JFreeChart lineChart = ChartFactory.createLineChart(
+				"Cotacoes x Tempo",
+				"Time in minutes",
+				"Cotacao",
+				createDataset(),
+				PlotOrientation.VERTICAL,
+				true, true, true);
+		
+		ChartPanel chartPanel = new ChartPanel(lineChart);
+		
 		final JButton buttom = new JButton("Plot Next");
 		
 		buttom.setActionCommand("NEXT");
@@ -45,21 +52,17 @@ public class PlotApplication extends ApplicationFrame implements ActionListener 
 		setContentPane(chartPanel);
 	}
 	
-	private JFreeChart createChart(final XYDataset dataset) {
-		final JFreeChart result = ChartFactory.createTimeSeriesChart(
-				"Trading oscilations demo", 
-				"Time", "Value", 
-				dataset, true, true, false);
-			
-		final XYPlot plot = result.getXYPlot();
-		ValueAxis axis = plot.getDomainAxis();
-		axis.setAutoRange(true);
-		axis.setFixedAutoRange(96*60); // 
-		axis = plot.getRangeAxis();
-		axis.setRange(0.9, 1.2);
-		
-		return result;
-	}
+	  private DefaultCategoryDataset createDataset( ) {
+	      DefaultCategoryDataset dataset = new DefaultCategoryDataset( );
+	      BaseApp app = new BaseApp();
+	      BaseApp.preencheDados();
+	      
+	      for(Ativo cotacao : BaseApp.ativos) {
+	    	  dataset.addValue(	cotacao.getClose() , "cotacao" , cotacao.getDate() );
+	      }
+	      
+	      return dataset;
+	  }
 	
 	
 	@Override
@@ -75,6 +78,8 @@ public class PlotApplication extends ApplicationFrame implements ActionListener 
 	
 	public static void main(String[] args) {
 		new BaseApp(40);
+			
+		
 		PlotApplication chart = new PlotApplication("MetaTrader App");
 		chart.pack();
 		RefineryUtilities.centerFrameOnScreen(chart);
