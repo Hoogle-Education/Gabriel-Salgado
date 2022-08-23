@@ -15,6 +15,7 @@ import utilities.file.LeitorCSV;
 class TradingApplication {
 	
 	static List<Ativo> dados;
+	static List<List<Ativo>> ativos;
 	static List<Double> medias;
 	
 	public TradingApplication() {
@@ -38,6 +39,8 @@ class TradingApplication {
 			System.err.println("Erro ao Interpretar o arquivo");
 			throw e3;
 		}
+		
+		ativos.add(dados);
 		
 		try{
 			leitor.fechar();

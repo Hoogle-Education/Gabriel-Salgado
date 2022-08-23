@@ -29,7 +29,8 @@ public class EscritorExcel {
 	public void criarPlanilha(String filename) throws IOException, IOException {
 		File file = new File(" ");
 		String path = file.getAbsolutePath();
-		String pathname = path + "\\" + filename + ".xls";
+		String pathname = path.strip() + filename;
+		System.out.println(pathname);
 		planilha = Workbook.createWorkbook(new File(pathname));
 		tabnames = new ArrayList<>();
 	}
